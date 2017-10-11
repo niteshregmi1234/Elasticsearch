@@ -22,5 +22,5 @@ The connectAndQueryEs.py is inside  src/main/resources/runningScript
 
 ********************************
 
-**Copyright= Nitesh Regmi 
-**email=niteshxxkkiller@gmail.com
+**Copyright= Nitesh Regmi** 
+**Email=niteshxxkkiller@gmail.com**
