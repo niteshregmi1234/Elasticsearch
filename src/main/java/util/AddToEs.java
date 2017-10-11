@@ -16,7 +16,7 @@ public class AddToEs implements Elastic {
             EsManager esManager = new EsManager();
             Client client = esManager.getClient("localhost", 9300).get();
             for (Map<String, String> sss : jsonMaps) {
-                IndexResponse response = client.prepareIndex("user", "UserMapping", sss.get("uniqueId"))
+                client.prepareIndex("user", "UserMapping", sss.get("uniqueId"))
                         .setSource(sss)
                         .get();
 
