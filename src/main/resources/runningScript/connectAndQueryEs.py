@@ -7,12 +7,14 @@ uniqueIdsList=[]
 firstNamesList=[]
 lastNamesList=[]
 res=[]
+dobsList=[]
 def main():
     print("* Choose Any One *")
     print("1. Search Through Unique Id")
     print("2. Search Through First Name")
     print("3. Search Through Last Name")
-    print("4. Exit")
+    print("4. Search Through Dob")
+    print("5. Exit")
     choice = raw_input("Your Choice: ")
 
     if choice=='1':
@@ -23,13 +25,15 @@ def main():
         firstNameSearch()
         connect_es()
         printRes()
-        print 2
     if choice=="3":
         lastNameSearch()
         connect_es()
         printRes()
-        print 3
-    if choice=='4':
+    if choice=="4":
+        dobSearch()
+        connect_es()
+        printRes()
+    if choice=='5':
         sys.exit()
 
 def uniqueIdSearch():
@@ -38,14 +42,19 @@ def uniqueIdSearch():
     uniqueIdsList=uniqueIds.split(",")
 
 def firstNameSearch():
-    firstNames=raw_input("Enter first names's")
+    firstNames=raw_input("Enter first names's: ")
     global firstNamesList
     firstNamesList=firstNames.split(",")
 
 def lastNameSearch():
-    lastNames=raw_input("Enter last names's")
+    lastNames=raw_input("Enter last names's: ")
     global lastNamesList
-    firstNamesList=lastNames.split(",")
+    lastNamesList=lastNames.split(",")
+def dobSearch():
+    dobs=raw_input("Enter dob's: ")
+    global dobsList
+    dobsList=dobs.split(",")
+
 
 def connect_es():
     esSourceIndex = elasticsearch.Elasticsearch('localhost:9200')
@@ -53,7 +62,15 @@ def connect_es():
     for uid in uniqueIdsList:
         result=esSourceIndex.search(index='user',q='uniqueId:'+'\"'+uid+'\"',doc_type='UserMapping',fields='firstName,lastName,dob,location,age',size=100,request_timeout=60)
         res.append(result["hits"]["hits"][0]["fields"])
-    print res
+    for uid in firstNamesList:
+        result=esSourceIndex.search(index='user',q='firstName:'+'\"'+uid+'\"',doc_type='UserMapping',fields='firstName,lastName,dob,location,age',size=100,request_timeout=60)
+        res.append(result["hits"]["hits"][0]["fields"])
+    for uid in lastNamesList:
+        result=esSourceIndex.search(index='user',q='lastName:'+'\"'+uid+'\"',doc_type='UserMapping',fields='firstName,lastName,dob,location,age',size=100,request_timeout=60)
+        res.append(result["hits"]["hits"][0]["fields"])
+    for uid in dobsList:
+        result=esSourceIndex.search(index='user',q='dob:'+'\"'+uid+'\"',doc_type='UserMapping',fields='firstName,lastName,dob,location,age',size=100,request_timeout=60)
+        res.append(result["hits"]["hits"][0]["fields"])
 
 def printRes():
     print("*********************************************************")
